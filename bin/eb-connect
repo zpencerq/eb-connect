@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'eb-connect'
+
+o = ElasticBeanstalk::Driver.new
+o.connect
