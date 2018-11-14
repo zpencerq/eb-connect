@@ -26,7 +26,7 @@ module ElasticBeanstalk
 
     def connect
       begin
-        user = Aws::IAM::Client.new.get_user[:user]
+        user = Aws::STS::Client.new.get_caller_identity
       rescue Aws::Errors::MissingCredentialsError
         puts "Uh oh. AWS Credentials could not be found!", ""
         puts "Do one of the following, then try eb-connect again:"
