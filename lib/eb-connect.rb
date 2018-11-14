@@ -73,37 +73,14 @@ module ElasticBeanstalk
           instance_id: instance[:instance_id],
           name: "#{name_tag ? name_tag.value : ""} (#{ip})",
           ip: ip,
-          key_name: instance[:key_name],
         }
       end.sort_by { |option| option[:name] }
 
       instance = ask?("Instances", instances)
 
-      present_pems = Dir.glob("*.pem")
-      pem_filename = "#{instance[:key_name]}.pem"
-
-      if instance[:key_name] && !ENV['KEY_DIR'] && !present_pems.include?(pem_filename)
-        puts "\n\nWhere are your keys located?"
-        ENV['KEY_DIR'] = gets.chomp
-      end
-
-      cmd = ["ssh"]
-
-      if present_pems.include?(pem_filename)
-        cmd << "-i #{pem_filename}"
-      elsif !ENV['KEY_DIR'].nil? && !ENV['KEY_DIR'].empty? && !instance[:key_name].nil?
-        cmd << "-i #{ENV['KEY_DIR']}/#{pem_filename}"
-      end
-
-      cmd << "#{"ec2-user@" if instance[:key_name]}#{instance[:ip]}"
-
-      ssh_cmd = cmd.join(" ")
-
+      ssh_cmd = "ssh #{instance[:ip]}"
       puts "", ssh_cmd
       system "#{ssh_cmd}"
-      if $?.exitstatus == 255
-        puts "","Did you properly set ENV['KEY_DIR']? (= #{ENV['KEY_DIR'] or "nil"})"
-      end
     end
   end
 end
