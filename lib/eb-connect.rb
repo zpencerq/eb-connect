@@ -80,7 +80,7 @@ module ElasticBeanstalk
 
       ssh_cmd = "ssh #{instance[:ip]}"
       puts "", ssh_cmd
-      system "#{ssh_cmd}"
+      exec ssh_cmd
     end
   end
 end
