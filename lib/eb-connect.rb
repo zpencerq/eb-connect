@@ -3,10 +3,6 @@ require 'aws-sdk'
 
 module ElasticBeanstalk
   class Driver
-    def initialize
-      Aws.config.update(region: 'us-east-1')
-    end
-
     def ask?(question, options)
       answer = nil
       answer = options[0] if options.length == 1
